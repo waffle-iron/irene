@@ -79,11 +79,12 @@ $FreestyleGuide-color--background: $background
   background: white
   box-shadow: 1px 0px 8px -1px rgba(0, 0, 0, 0.3)
 
-.scan-completed
-  color: #80C081
-
-.scan-pending
-  color: #EF4836
+.scan-status
+  li
+    .fa-check
+      color: #80C081
+    .fa-times
+      color: #EF4836
 
 .current-user
   float: right
@@ -114,10 +115,6 @@ $FreestyleGuide-color--background: $background
 
 input
   display: block
-
-/*form
-  button
-    margin-top: 10px
 
 .title-tag
   background-color: #5bc0de
@@ -225,6 +222,9 @@ select
   display: flex
   justify-content: center
 
+.text-centre
+  text-align: center
+
 .vertical-align-center
   display: flex
   align-items: center
@@ -261,7 +261,7 @@ select
   input,button
     margin-top: 10px
 
-._c-notification__container_qmx12s
+div[class^="_c-notification__container"]
   z-index: 2000!important
 
 .is-progress
@@ -272,6 +272,12 @@ select
 
 .capitalize-text
   text-transform: capitalize
+
+.uppercase-text
+  text-transform: uppercase
+
+.lowercase-text
+  text-transform: lowercase
 
 .start-tour
   font-size: 16px
@@ -337,17 +343,31 @@ button, .button
   button:nth-child(2)
     margin-left: 10px
   .start-scan
-    width: 150px  
+    width: 150px
   ul
     li
       margin-top: 10px
 
 .hide-overflow
+  max-width: 300px
   overflow: hidden
   text-overflow: ellipsis
   white-space: nowrap
   &:hover
+    z-index: 1
     overflow: visible
+
+.app-icon
+  z-index: 0
+  left: 27%
+
+.overflow-hidden
+  @extend .hide-overflow
+  max-width: 100px
+
+.fixed-icon
+  position: absolute
+  left: 85%
 
 .error-page
   margin-top: 150px
@@ -361,7 +381,10 @@ button, .button
   bottom: 70px!important
 
 .package-desc
+  margin-right: 10px
+  margin-top: 10px!important
   table
+    cursor: pointer
     font-size: 13px
     margin-top: 10px
     tr
@@ -370,10 +393,10 @@ button, .button
         padding: 2px
         border: 1px solid #cccccc!important
         vertical-align: middle
-  :last-child
+  table.api-scan-status
     tr
       td
-        padding: 6px
+        padding: 7px
 
 .invoice-table
   table
@@ -450,9 +473,9 @@ button, .button
     justify-content: center
 
 .auto-adjust
-  margin: auto
   button
-    margin-left: 0px!important
+    width: 100px
+    margin: auto
 
 .hideOrShow
   cursor: pointer
@@ -468,6 +491,7 @@ button, .button
     margin-left: 30px
   .card-button:nth-child(2)
     margin-left: -20px
+
 .file-hide-overflow
   margin-top: -20px
 
@@ -519,6 +543,10 @@ b.bold
   color: #808080
   max-height: 25px
 
+.progress-wrap.progress.is-success
+  border: 1px solid #80C081
+  background-color: #80C081
+
 .is-progress
   .details
     border: 1px solid #808080
@@ -554,3 +582,130 @@ b.bold
     font-weight: 100
     td
       vertical-align: middle
+
+ul.scan-table
+  li
+    width: 130px
+    padding: 11px 5px
+  h5
+    margin-left: 10px
+
+ul.risk-table
+  h5
+    margin-left: 15px
+    margin-bottom: -5px
+    margin-top: 10px
+  li
+    padding: 2px
+    width: 120px
+    margin-left: 15px
+    height: 25px
+  li:before
+    font-size: 30px
+    position: relative
+    top: 4px
+  i
+    margin-right: 5px
+    font-size: 20px
+
+.progress-wrap
+  width: 60%
+  border-radius: 10px!important
+
+canvas
+  margin-top: 30px
+
+.button-width
+  .column
+    margin-left: 10px
+    margin-right: 10px
+
+.app-details-card
+  .card-header
+    height: 40px
+  .card-content
+    height: 220px
+    .columns
+      .column
+        padding-top: 10px
+        margin-top: -10px
+  .card-button button
+    margin-top: -5px
+
+.scan-status-card
+  .card-header
+    height: 40px
+    h5
+      margin-top: 7px
+  .card-content
+    height: 100px
+    .columns
+      .column
+        height: 40px
+        .progress-wrap
+          margin-top: 50px
+
+.tooltip
+  &:hover
+    .tooltiptext
+      visibility: visible
+  .tooltiptext
+    text-transform: capitalize
+    visibility: hidden
+    width: 200px
+    background-color: rgba(0, 0, 0, 0.4)
+    color: #fff
+    text-align: center
+    border-radius: 6px
+    position: absolute
+    top: 43px
+    right: 10px
+    z-index: 1
+    font-size: 12px
+  .tooltip-collapse
+    width: 200px
+    top: 92px
+    left: 10px
+    white-space: normal
+
+.cvss-box
+  cursor: pointer
+  width: 80px
+  .tooltiptext
+    box-shadow: 2px 2px 5px 2px #888888
+    position: relative
+    left: 100px
+    top: -140px
+    width: 200px
+    li
+      padding: 5px
+      list-style-type: none
+
+// Update this in bohemia //
+
+.tag.is-critical
+  background-color: #000
+  color: #fff
+
+.message.is-critical
+  .message-header
+    background-color: #000
+    color: #fff
+  .message-body
+    border-color: rgba(0, 0, 0, 0.4)
+
+li.is-critical:before
+  content: "• "
+  color: #000
+
+#hiddencolorholder .is-critical
+  color: #000
+
+.cvss-box
+  border-radius: 5px
+  height: 100px
+  display: block
+  h1
+    padding-top: 30px
+
+// End //

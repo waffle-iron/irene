@@ -13,4 +13,4 @@ test 'it renders', (assert) ->
 
   @render hbs """{{project-overview}}"""
 
-  assert.equal @$().text().trim(), 'created on: version codeHigh: Medium: Low: Passed: Unknown: Settings'
+  assert.equal @$().text().trim(), 'Started  version codeCritical: High: Medium: Low: Passed: Unknown: Settings'

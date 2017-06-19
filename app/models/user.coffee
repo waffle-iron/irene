@@ -26,6 +26,12 @@ User = DS.Model.extend
   limitedScans: DS.attr 'boolean'
   scansLeft: DS.attr 'number'
   githubRedirectUrl: DS.attr 'string'
+  billingHidden: DS.attr 'boolean'
+
+  ifBillingIsNotHidden: (->
+    billingHidden = @get 'billingHidden'
+    !billingHidden
+  ).property 'billingHidden'
 
   getExpiryDate: (->
     if ENV.isAppknox
@@ -55,5 +61,9 @@ User = DS.Model.extend
     namespaces = @get "namespaces"
     namespaces?.split ","
   ).property "namespaces"
+
+  namespacesCount: Ember.computed.alias 'namespaces.length'
+
+  hasNamespace: Ember.computed.gt 'namespacesCount', 0
 
 `export default User`

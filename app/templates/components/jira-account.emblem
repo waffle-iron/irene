@@ -1,21 +1,23 @@
-h6
+h5
   = t "jiraIntegration"
 
 if user.hasJiraToken
-  button.is-primary click="revokeJira"
+  h6
+    | Intergations completed
+  button.is-primary click="revokeJira mp-jira-revoke"
     = t "revokeJira"
 else
   form
     .control
       .columns
         .column.is-fullwidth
-          = input class="input" placeholder=(t "jiraHost") type="text" value=jiraHost
+          = input class="input mp-jira-host" placeholder=(t "jiraHost") type="text" value=jiraHost
     .control.is-grouped
       .columns
         .column
-          = input class="input" placeholder=(t "username") type="text" value=jiraUsername
+          = input class="input mp-jira-username" placeholder=(t "username") type="text" value=jiraUsername
         .column.margin-left20
-          = input class="input" placeholder=(t "password") type="password" value=jiraPassword
+          = input class="input mp-jira-password" placeholder=(t "password") type="password" value=jiraPassword
 
-    button.is-primary click="integrateJira"
+    button.is-primary click="integrateJira" class="mp-jira-integrate"
       = t "integrateJIRA"

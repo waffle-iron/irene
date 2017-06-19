@@ -27,11 +27,47 @@ File = DS.Model.extend BaseModelMixin,
   analyses: DS.hasMany 'analysis', inverse: 'file'
   report: DS.attr 'string'
   manual: DS.attr 'boolean'
+  apiScanProgress: DS.attr 'number'
+  staticScanProgress: DS.attr 'number'
+  isStaticDone: DS.attr 'boolean'
+  isDynamicDone: DS.attr 'boolean'
+  isManualDone: DS.attr 'boolean'
+  isApiDone: DS.attr 'boolean'
 
   ifManualNotRequested: (->
     manual = @get 'manual'
     !manual
   ).property 'manual'
+
+  isApiScanning: (->
+    apiScanProgress = @get "apiScanProgress"
+    apiScanProgress not in [0, undefined, 100]
+  ).property "apiScanProgress"
+
+  scanProgressClass: (type)->
+    if type is true
+      return true
+    false
+
+  isStaticCompleted: (->
+    isStaticDone = @get "isStaticDone"
+    @scanProgressClass isStaticDone
+  ).property "isStaticDone"
+
+  isDynamicCompleted: (->
+    isDynamicDone = @get "isDynamicDone"
+    @scanProgressClass isDynamicDone
+  ).property "isDynamicDone"
+
+  isApiCompleted: (->
+    isApiDone = @get "isApiDone"
+    @scanProgressClass isApiDone
+  ).property "isApiDone"
+
+  isManualCompleted: (->
+    isManualDone = @get "isManualDone"
+    @scanProgressClass isManualDone
+  ).property "isManualDone"
 
   fileDetailsClass: (->
     hasMultipleFiles = @get "project.hasMultipleFiles"
@@ -55,6 +91,7 @@ File = DS.Model.extend BaseModelMixin,
   analysesSorting: ['risk:desc']
   sortedAnalyses: Ember.computed.sort 'analyses', 'analysesSorting'
 
+  countRiskCritical: 0
   countRiskHigh: 0
   countRiskMedium: 0
   countRiskLow: 0
@@ -64,18 +101,21 @@ File = DS.Model.extend BaseModelMixin,
   pieChartData: Ember.computed 'analyses.@each.risk', ->
     analyses = @get "analyses"
     r = ENUMS.RISK
+    countRiskCritical = _getAnalysesCount analyses, r.CRITICAL
     countRiskHigh = _getAnalysesCount analyses, r.HIGH
     countRiskMedium = _getAnalysesCount analyses, r.MEDIUM
     countRiskLow = _getAnalysesCount analyses, r.LOW
     countRiskNone = _getAnalysesCount analyses, r.NONE
     countRiskUnknown = _getAnalysesCount analyses, r.UNKNOWN
 
+    @set "countRiskCritical", countRiskCritical
     @set "countRiskHigh", countRiskHigh
     @set "countRiskMedium", countRiskMedium
     @set "countRiskLow", countRiskLow
     @set "countRiskNone", countRiskNone
     @set "countRiskUnknown", countRiskUnknown
     [
+      {"value": countRiskCritical, "color": _getComputedColor "critical"},
       {"value": countRiskHigh, "color": _getComputedColor "danger"},
       {"value": countRiskMedium, "color": _getComputedColor "warning"},
       {"value": countRiskLow, "color": _getComputedColor "info"},
@@ -83,27 +123,17 @@ File = DS.Model.extend BaseModelMixin,
       {"value": countRiskUnknown, "color": _getComputedColor "default"}
     ]
 
-  unknownRiskAnalyses: Ember.computed 'analyses.@each.risk', ->
-    @get("analyses").filterBy 'risk', ENUMS.RISK.UNKNOWN
+  dynamicScanProgress: Ember.computed "analyses.@each.risk", "isDynamicDone", ->
+    isDynamicDone  = @get "isDynamicDone"
+    if isDynamicDone
+      return 100
+    0
 
-  scanCompletionClass: (type)->
-    for analysis in @get "unknownRiskAnalyses"
-      types = analysis.get "vulnerability.types"
-      if types? and type in types
-        return "fa-times scan-pending"
-    "fa-check scan-completed"
-
-  isStaticCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.STATIC
-
-  isDynamicCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.DYNAMIC
-
-  isManualCompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.MANUAL
-
-  isAPICompleted: Ember.computed "unknownRiskAnalyses", ->
-    @scanCompletionClass ENUMS.VULNERABILITY_TYPE.API
+  manualScanProgress: Ember.computed "analyses.@each.risk", "isManualCompleted", ->
+    isManualDone  = @get "isManualDone"
+    if isManualDone
+      return 100
+    0
 
   isNoneStaus: (->
     status = @get 'dynamicStatus'
