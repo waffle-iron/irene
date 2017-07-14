@@ -16,7 +16,7 @@ module.exports = function(environment) {
       socketIO: true
     },
     mixpanel: {
-      enabled: true,
+      enabled: false,
       LOG_EVENT_TRACKING: false,
       token: 'baf97efda8bb7c89401cf455d33bcd29'
     },
@@ -62,7 +62,7 @@ module.exports = function(environment) {
 
     notifications: {
       autoClear: true,
-      duration: 4000 // Milliseconds
+      duration: 7000 // Milliseconds
     },
     moment: {
       allowEmpty: true, // default: false
@@ -146,14 +146,10 @@ module.exports = function(environment) {
       lang: 'lang',
       deleteGHRepo: 'delete_github_repo',
       deleteJIRAProject: 'delete_jira_project',
-      apiScanOptions: 'api_scan_options'
+      apiScanOptions: 'api_scan_options',
+      enableMFA: 'mfa/enable',
+      disableMFA: 'mfa/disable'
     },
-    TOUR: {
-      newScan: 'ScanAnApp',
-      scanDetail: 'ScanDetails',
-      manualTour: 'Dashboard',
-      devknoxTour: 'DevknoxTour'
-    }
   };
 
   if (environment === 'development') {
@@ -180,11 +176,11 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.mixpanel = {
-      enabled: false
-    };
     ENV['APP'].opbeat = {
         DEBUG: true
+    };
+    ENV.rollbar = {
+      enabled: false
     };
   }
 
@@ -198,11 +194,11 @@ module.exports = function(environment) {
     ENV.stripe = {
       publishableKey: "pk_test_9G633HADop7N2NLdi6g2BHHA"
     };
-    ENV.mixpanel = {
-      enabled: false
-    };
     ENV['APP'].opbeat = {
         DEBUG: true
+    };
+    ENV.rollbar = {
+      enabled: false
     };
   }
 
@@ -213,6 +209,9 @@ module.exports = function(environment) {
     ENV.socketPath = "https://socket.appknox.com",
     ENV['ember-cli-mirage'] = {
       enabled: false
+    };
+    ENV.mixpanel = {
+      enabled: true
     };
     ENV['host'] = "https://api.appknox.com";
     ENV.stripe = {

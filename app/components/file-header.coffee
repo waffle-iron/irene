@@ -7,11 +7,18 @@ FileHeaderComponent = Ember.Component.extend
   radiusRatio:0.9
 
   didInsertElement: ->
-    zcEl = $(@element).find ".zeroclipboard-copy"
+    clipboard = new Clipboard('.copy-password')
+    @set "clipboard", clipboard
     that = @
-    client = new ZeroClipboard zcEl
-    client.on 'aftercopy', ->
+    clipboard.on 'success', (e) ->
       that.get("notify").info "Password Copied!"
+      e.clearSelection()
+    clipboard.on 'error', ->
+      that.get("notify").error "Failed, please try again"
+
+  willDestroyElement: ->
+    clipboard = @get "clipboard"
+    clipboard.destroy()
 
   actions:
     getPDFReportLink: ->
