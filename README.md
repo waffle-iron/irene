@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/appknox/irene.png?label=ready&title=Ready)](https://waffle.io/appknox/irene?utm_source=badge)
 # Irene
 
 [![CircleCI](https://circleci.com/gh/appknox/irene.svg?style=shield&circle-token=6c82b8d9cddf223dd01f7bffea864d19f0935107)](https://circleci.com/gh/appknox/irene)
